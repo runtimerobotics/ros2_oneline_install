@@ -26,7 +26,7 @@ Copy & Paste the following command to install ROS 2 Iron in Ubuntu 22.04 LTS
 **Install ROS 2 Iron**
 
 ```
-wget -c https://raw.githubusercontent.com/runtimerobotics/ros2_oneline_install/main/ros2_install_humble.sh && chmod +x ./ros2_install_iron.sh && ./ros2_install_iron.sh
+wget -c https://raw.githubusercontent.com/runtimerobotics/ros2_oneline_install/main/ros2_install_iron.sh && chmod +x ./ros2_install_iron.sh && ./ros2_install_iron.sh
 ```
 
 **Uninstall ROS 2 Iron**
