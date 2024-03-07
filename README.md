@@ -1,5 +1,5 @@
 # ros2_oneline_install
-Single command to install ROS 2 Distribution
+Single command to install ROS 2 Humble, Iron in Ubuntu 22.04 LTS Desktop
 
 
 ## ROS 2 Humble
