@@ -113,7 +113,7 @@ echo "     [1. Desktop Full Install: (Recommended) : Everything in Desktop plus 
 echo ""
 echo "     [2. Desktop Install: Everything in Desktop ]"
 echo ""
-echo "     [2. ROS-Base: (Bare Bones) ROS packaging, build, and communication libraries. No GUI tools.]"
+echo "     [3. ROS-Base: (Bare Bones) ROS packaging, build, and communication libraries. No GUI tools.]"
 echo ""
 #Assigning default value as 1: Desktop full install
 read -p "Enter your install (Default is 1):" answer 
