@@ -5,7 +5,7 @@ Single command to install
 
 ## ROS 2 Jazzy
 
-Copy & Paste the following command to install/uninstall ROS 2 Humble in Ubuntu 24.04 LTS
+Copy & Paste the following command to install/uninstall ROS 2 Jazzy in Ubuntu 24.04 LTS
 
 **Install ROS 2 Jazzy**
 
