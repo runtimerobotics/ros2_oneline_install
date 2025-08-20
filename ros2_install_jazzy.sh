@@ -52,7 +52,7 @@ locale  # verify settings
 
 
 sudo apt install -y software-properties-common
-sudo add-apt-repository universe
+sudo add-apt-repository -y universe
 
 echo ""
 echo ">>> {Done: Added Ubuntu repositories}"
