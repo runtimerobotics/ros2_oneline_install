@@ -119,9 +119,21 @@ echo "     [2. Desktop Install: Everything in Desktop ]"
 echo ""
 echo "     [3. ROS-Base: (Bare Bones) ROS packaging, build, and communication libraries. No GUI tools.]"
 echo ""
-#Assigning default value as 1: Desktop full install
-read -p "Enter your install (Default is 1):" answer 
 
+# --- Configurable default ---
+DEFAULT_CHOICE=1
+
+if [ "${NONINTERACTIVE:-}" = "1" ]; then
+  # Non-interactive: take env var or fallback to default
+  answer="${ROS_INSTALL_CHOICE:-$DEFAULT_CHOICE}"
+  echo "NONINTERACTIVE mode: Using choice ${answer}"
+else
+  # Interactive mode: ask user, fallback to default on empty input
+  read -r -p "Enter your install (Default is ${DEFAULT_CHOICE}) [1/2/3]: " answer
+  answer="${answer:-$DEFAULT_CHOICE}"
+fi
+
+# Normalize/validate
 case "$answer" in
   1)
     package_type="desktop-full"
@@ -131,19 +143,16 @@ case "$answer" in
     ;;
   3)
     package_type="ros-base"
-    ;;    
-  * )
-    package_type="desktop-full"
-    ;;
+    ;; 
+  *)
+    echo "Unrecognized choice '$answer'. Falling back to default (${DEFAULT_CHOICE})."
+    if [ "$DEFAULT_CHOICE" = "1" ]; then
+      package_type="desktop-full"
+    else
+      package_type="ros-base"
+    fi
+;;
 esac
-echo "#######################################################################################################################"
-echo ""
-echo ">>>  {Starting ROS installation, this will take about 20 min. It will depends on your internet  connection}"
-echo ""
-sudo apt-get install -y ros-${name_ros_distro}-${package_type} 
-sudo apt install -y ros-dev-tools
-echo ""
-echo ""
 echo "#######################################################################################################################"
 echo ">>> {Step 6: Setting ROS Environment, This will add ROS environment to .bashrc.}" 
 echo ">>> { After adding this, you can able to access ROS commands in terminal}"

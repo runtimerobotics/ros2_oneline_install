@@ -126,9 +126,11 @@ sudo apt -y upgrade
 echo ""
 echo "#######################################################################################################################"
 echo ">>> {Step 5: Install ROS, you pick how much of ROS you would like to install.}"
-echo "     [1. Desktop Install: (Recommended) : Everything in Desktop plus 2D/3D simulators and 2D/3D perception packages ]"
+echo "     [1. Desktop Full Install: (Recommended) : Everything in Desktop plus 2D/3D simulators and 2D/3D perception packages ]"
 echo ""
-echo "     [2. ROS-Base: (Bare Bones) ROS packaging, build, and communication libraries. No GUI tools.]"
+echo "     [2. Desktop Install: Everything in Desktop ]"
+echo ""
+echo "     [3. ROS-Base: (Bare Bones) ROS packaging, build, and communication libraries. No GUI tools.]"
 echo ""
 # --- Configurable default ---
 DEFAULT_CHOICE=1     # 1=desktop-full, 2=ros-base
@@ -149,8 +151,11 @@ case "$answer" in
     package_type="desktop-full"
     ;;
   2)
-    package_type="ros-base"
+    package_type="desktop"
     ;;
+  3)
+    package_type="ros-base"
+    ;; 
   *)
     echo "Unrecognized choice '$answer'. Falling back to default (${DEFAULT_CHOICE})."
     if [ "$DEFAULT_CHOICE" = "1" ]; then
@@ -158,8 +163,8 @@ case "$answer" in
     else
       package_type="ros-base"
     fi
-    ;;
-esac
+;;
+
 echo "#######################################################################################################################"
 echo ""
 echo ">>>  {Starting ROS installation, this will take about 20 min. It will depends on your internet  connection}"
