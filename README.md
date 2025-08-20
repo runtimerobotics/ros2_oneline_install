@@ -7,6 +7,13 @@ Single command to install
 
 Copy & Paste the following command to install/uninstall ROS 2 Jazzy in Ubuntu 24.04 LTS
 
+To make the setup completely non-interactive you can use the following environment variables:
+
+| Variable          | Values                   | Default | Description                                                                 |
+|-------------------|--------------------------|---------|-----------------------------------------------------------------------------|
+| `NONINTERACTIVE`  | `0` (interactive), `1` non interactive   | `0`     | If set to `1`, skips prompts and uses environment variables for configuration. |
+| `ROS_INSTALL_CHOICE` | `1` (Desktop Full), `2` (ROS Base) | `1`     | Chooses which ROS variant to install. **Only used when `NONINTERACTIVE=1`**.      |
+
 **Install ROS 2 Jazzy**
 
 ```
