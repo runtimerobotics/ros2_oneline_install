@@ -52,7 +52,7 @@ locale  # verify settings
 
 
 sudo apt install -y software-properties-common
-sudo add-apt-repository universe
+sudo add-apt-repository -y universe
 
 echo ""
 echo ">>> {Done: Added Ubuntu repositories}"
@@ -132,8 +132,18 @@ echo "     [2. Desktop Install: Everything in Desktop ]"
 echo ""
 echo "     [3. ROS-Base: (Bare Bones) ROS packaging, build, and communication libraries. No GUI tools.]"
 echo ""
-#Assigning default value as 1: Desktop full install
-read -p "Enter your install (Default is 1):" answer 
+# --- Configurable default ---
+DEFAULT_CHOICE=1     # 1=desktop-full, 2=ros-base
+
+if [ "${NONINTERACTIVE:-}" = "1" ]; then
+  # Non-interactive: take env var or fallback to default
+  answer="${ROS_INSTALL_CHOICE:-$DEFAULT_CHOICE}"
+  echo "NONINTERACTIVE mode: Using choice ${answer}"
+else
+  # Interactive mode: ask user, fallback to default on empty input
+  read -r -p "Enter your install (Default is ${DEFAULT_CHOICE}) [1/2]: " answer
+  answer="${answer:-$DEFAULT_CHOICE}"
+fi
 
 # Normalize/validate
 case "$answer" in
