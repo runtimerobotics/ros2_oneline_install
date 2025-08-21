@@ -154,6 +154,14 @@ case "$answer" in
 ;;
 esac
 echo "#######################################################################################################################"
+echo ""
+echo ">>>  {Starting ROS installation, this will take about 20 min. It will depends on your internet  connection}"
+echo ""
+sudo apt-get install -y ros-${name_ros_distro}-${package_type} 
+sudo apt install -y ros-dev-tools
+echo ""
+echo ""
+echo "#######################################################################################################################"
 echo ">>> {Step 6: Setting ROS Environment, This will add ROS environment to .bashrc.}" 
 echo ">>> { After adding this, you can able to access ROS commands in terminal}"
 echo ""
