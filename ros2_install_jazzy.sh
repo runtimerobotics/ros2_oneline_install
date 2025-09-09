@@ -47,6 +47,12 @@ echo ""
 
 locale  # check for UTF-8
 
+# Thoroughly clean up any existing ROS 2 repository configurations
+sudo rm -f /etc/apt/sources.list.d/ros2*.list
+sudo rm -f /etc/apt/sources.list.d/ros-*.list
+sudo rm -f /usr/share/keyrings/ros-archive-keyring.gpg
+sudo rm -f /usr/share/ros/apt/gpg
+
 sudo apt update 
 sudo apt install -y locales
 sudo locale-gen en_US en_US.UTF-8
@@ -64,33 +70,24 @@ echo ""
 echo ">>> {Done: Added Ubuntu repositories}"
 echo ""
 echo "#######################################################################################################################"
-echo ">>> {Step 2: Clean up ALL existing ROS 2 repositories and keys}"
+echo ">>> {Step 2: Add ROS 2 repository and keys}"
 echo ""
-
-# Thoroughly clean up any existing ROS 2 repository configurations
-sudo rm -f /etc/apt/sources.list.d/ros2*.list
-sudo rm -f /etc/apt/sources.list.d/ros-*.list
-sudo rm -f /usr/share/keyrings/ros-archive-keyring.gpg
-sudo rm -f /usr/share/ros/apt/gpg
 
 # Also check and remove any repository configurations in the main sources.list
 if grep -q "packages.ros.org" /etc/apt/sources.list; then
     sudo sed -i '/packages.ros.org/d' /etc/apt/sources.list
 fi
 
-echo ">>> {Installing dependencies for ROS 2 APT Source package}"
-sudo apt update 
-sudo apt install -y curl openssl gnupg
+echo ">>> {Installing ROS 2 APT Source package}"
+sudo apt update && sudo apt install curl -y
+export ROS_APT_SOURCE_VERSION=$(curl -s https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest | grep -F "tag_name" | awk -F\" '{print $4}')
+curl -L -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo $VERSION_CODENAME)_all.deb"
+sudo dpkg -i /tmp/ros2-apt-source.deb
 
-echo ">>> {Manually setting up ROS 2 repository and keys}"
-# Directly set up the repository without using the ros2-apt-source package
-sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-
-echo ">>> {Done: Added Keys}"
+echo ">>> {Done: Added ROS 2 repository}"
 echo ""
 echo "#######################################################################################################################"
-echo ">>> {Step 4: Updating Ubuntu package index, this will take few minutes depend on your network connection}"
+echo ">>> {Step 3: Updating Ubuntu package index, this will take few minutes depend on your network connection}"
 echo ""
 sudo apt update || {
     echo "Error updating package list. Attempting to fix..."
@@ -102,7 +99,7 @@ sudo apt -y upgrade
 
 echo ""
 echo "#######################################################################################################################"
-echo ">>> {Step 5: Install ROS, you pick how much of ROS you would like to install.}"
+echo ">>> {Step 4: Install ROS, you pick how much of ROS you would like to install.}"
 echo "     [1. Desktop Full Install: (Recommended) : Everything in Desktop plus 2D/3D simulators and 2D/3D perception packages ]"
 echo ""
 echo "     [2. Desktop Install: Everything in Desktop ]"
@@ -162,7 +159,7 @@ sudo apt install -y ros-dev-tools || {
 echo ""
 echo ""
 echo "#######################################################################################################################"
-echo ">>> {Step 6: Setting ROS Environment, This will add ROS environment to .bashrc.}" 
+echo ">>> {Step 5: Setting ROS Environment, This will add ROS environment to .bashrc.}" 
 echo ">>> { After adding this, you can able to access ROS commands in terminal}"
 echo ""
 
@@ -171,13 +168,22 @@ if ! grep -q "source /opt/ros/${name_ros_distro}/setup.bash" /home/$user_name/.b
   echo "source /opt/ros/${name_ros_distro}/setup.bash" >> /home/$user_name/.bashrc
 fi
 
-# Source for current session
+# Source for current session - temporarily disable error on unbound variable
+# This prevents the AMENT_TRACE_SETUP_FILES unbound variable error
+echo ""
+echo "#######################################################################################################################"
+echo ">>> {Step 6: Testing ROS installation, checking ROS version.}"
+echo ""
+
 if [ -f "/opt/ros/${name_ros_distro}/setup.bash" ]; then
+  echo ">>> {Sourcing ROS environment...}"
+  
+  # Temporarily disable -u to source the file
+  set +u
   source /opt/ros/${name_ros_distro}/setup.bash
-  echo ""
-  echo "#######################################################################################################################"
-  echo ">>> {Step 7: Testing ROS installation, checking ROS version.}"
-  echo ""
+  # Re-enable -u after sourcing
+  set -u
+  
   echo ">>> {Type [printenv ROS_DISTRO] to get the current ROS installed version}"
   echo ""
   printenv ROS_DISTRO
