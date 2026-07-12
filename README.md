@@ -23,7 +23,7 @@ wget -c https://raw.githubusercontent.com/runtimerobotics/ros2_oneline_install/m
 **Uninstall ROS 2 Jazzy**
 
 ```
-wget -c https://raw.githubusercontent.com/runtimerobotics/ros2_oneline_install/main/ros2_uninstall_humble.sh && chmod +x ./ros2_uninstall_humble.sh && ./ros2_uninstall_humble.sh
+wget -c https://raw.githubusercontent.com/runtimerobotics/ros2_oneline_install/main/ros2_uninstall_jazzy.sh && chmod +x ./ros2_uninstall_jazzy.sh && ./ros2_uninstall_jazzy.sh
 ```
 
 
